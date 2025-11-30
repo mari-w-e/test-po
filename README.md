@@ -96,7 +96,12 @@ routers (эндпоинты). Если маршрутизация или лог�
 Он нужен, чтобы убедиться, что создание задачи работает правильно и API корректно передаёт данные в базу.
 
 ```
-def test_create_todo(): response = client.post("/todos/", json={"title": "Test task", "description": "Integration test"}) assert response.status_code == 200 or response.status_code == 201 data = response.json() assert data.get("title") == "Test task" assert "id" in data
+def test_create_todo():
+   response = client.post("/todos/", json={"title": "Test task", "description": "Integration test"})
+   assert response.status_code == 200 or response.status_code == 201
+   data = response.json()
+   assert data.get("title") == "Test task"
+   assert "id" in data
 ```
 
 Отправляет POST-запрос на создание новой задачи (/todos/) с заголовком и описанием.
@@ -109,7 +114,10 @@ def test_create_todo(): response = client.post("/todos/", json={"title": "Test t
 Он проверяет корректность взаимодействия между слоем API и базой данных при чтении множества записей. Тест показывает, что приложение правильно возвращает данные пользователю, а не ломается при чтении нескольких записей.
 
 ```
-def test_get_all_todos(): response = client.get("/todos/") assert response.status_code == 200 assert isinstance(response.json(), list)
+def test_get_all_todos():
+   response = client.get("/todos/")
+   assert response.status_code == 200
+   assert isinstance(response.json(), list)
 ```
 
 Отправляет GET-запрос на /todos/ для получения всех задач.
@@ -120,7 +128,14 @@ def test_get_all_todos(): response = client.get("/todos/") assert response.statu
 Проверяет работу связки создания и получения конкретной записи, что API корректно передаёт уникальные идентификаторы и данные сохраняются, а также что можно получить конкретный объект после создания.
 
 ```
-def test_get_single_todo(): create_response = client.post("/todos/", json={"title": "Single test", "description": "Check"}) assert create_response.status_code in (200, 201) todo_id = create_response.json()["id"] response = client.get(f"/todos/{todo_id}") assert response.status_code == 200 data = response.json() assert data["id"] == todo_id assert data["title"] == "Single test"
+def test_get_single_todo():
+   create_response = client.post("/todos/", json={"title": "Single test", "description": "Check"})
+   assert create_response.status_code in (200, 201)
+   todo_id = create_response.json()["id"]
+   response = client.get(f"/todos/{todo_id}")
+   assert response.status_code == 200 data = response.json()
+   assert data["id"] == todo_id
+   assert data["title"] == "Single test"
 ```
 
 Сначала создается новая задача через POST-запрос. Затем GET-запрос по id созданной задачи. Проверка, что статус 200 и данные соответствуют созданной задаче.
@@ -130,7 +145,14 @@ def test_get_single_todo(): create_response = client.post("/todos/", json={"titl
 Проверяет взаимодействие API и базы данных при изменении данных.
 
 ```
-def test_update_todo(): created = client.post("/todos/", json={"title": "Old title", "description": "Test"}).json() todo_id = created["id"] update_data = {"title": "New title", "description": "Updated description"} response = client.put(f"/todos/{todo_id}", json=update_data) assert response.status_code == 200 updated = response.json() assert updated["title"] == "New title" assert updated["description"] == "Updated description"
+def test_update_todo():
+   created = client.post("/todos/", json={"title": "Old title", "description": "Test"}).json()
+   todo_id = created["id"]
+   update_data = {"title": "New title", "description": "Updated description"}
+   response = client.put(f"/todos/{todo_id}", json=update_data)
+   assert response.status_code == 200 updated = response.json()
+   assert updated["title"] == "New title"
+   assert updated["description"] == "Updated description"
 ```
 
 Создаем новую задачу через POST-запрос.
@@ -142,7 +164,13 @@ def test_update_todo(): created = client.post("/todos/", json={"title": "Old tit
 Проверяет работу удаления записи и корректность API после удаления. Если удаление не работает, база будет засорена ненужными задачами.
 
 ```
-def test_delete_todo(): created = client.post("/todos/", json={"title": "Delete me", "description": ""}).json() todo_id = created["id"] response = client.delete(f"/todos/{todo_id}") assert response.status_code in (200, 204) get_response = client.get(f"/todos/{todo_id}") assert get_response.status_code in (404, 400, 422)
+def test_delete_todo():
+   created = client.post("/todos/", json={"title": "Delete me", "description": ""}).json()
+   todo_id = created["id"]
+   esponse = client.delete(f"/todos/{todo_id}")
+   assert response.status_code in (200, 204)
+   get_response = client.get(f"/todos/{todo_id}")
+   assert get_response.status_code in (404, 400, 422)
 ```
 
 Создаем задачу через POST-запрос. 
@@ -155,7 +183,8 @@ def test_delete_todo(): created = client.post("/todos/", json={"title": "Delete 
 
 ```
 def test_get_nonexistent_todo():
-   response = client.get("/todos/999999") assert response.status_code in (404, 400, 422)
+   response = client.get("/todos/999999")
+   assert response.status_code in (404, 400, 422)
 ```
 
 Делает GET-запрос к задаче с несуществующим id (н999999).
