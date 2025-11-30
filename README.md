@@ -96,3 +96,24 @@ routers (эндпоинты). Если маршрутизация или лог�
 ......                                                         [100%]
 6 passed in 0.54s
 ```
+
+
+```
+@mari-w-e ➜ /workspaces/test-po $ python -m pytest tests/test_integration_todo.py -v
+======================== test session starts =========================
+platform linux -- Python 3.12.1, pytest-9.0.1, pluggy-1.6.0 -- /home/codespace/.python/current/bin/python
+cachedir: .pytest_cache
+rootdir: /workspaces/test-po
+plugins: anyio-4.11.0, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 6 items                                                    
+
+tests/test_integration_todo.py::test_create_todo PASSED        [ 16%]
+tests/test_integration_todo.py::test_get_all_todos PASSED      [ 33%]
+tests/test_integration_todo.py::test_get_single_todo PASSED    [ 50%]
+tests/test_integration_todo.py::test_update_todo PASSED        [ 66%]
+tests/test_integration_todo.py::test_delete_todo PASSED        [ 83%]
+tests/test_integration_todo.py::test_get_nonexistent_todo PASSED [100%]
+
+========================= 6 passed in 0.48s ==========================
+```
